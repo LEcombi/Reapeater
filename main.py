@@ -1,17 +1,34 @@
+import tkinter as tk
 import pyperclip
-counter = 1
 
-TimesPrint = int(input("How many times would you like to write the text: "))
-Text = str(input("What would you like to write: "))
+def copy_text():
+    try:
+        TimesPrint = int(times_entry.get())
+        Text = text_entry.get()
+        entire_text = ""
 
-# Here, the entire text is stored to be copied to the clipboard later
-entire_text = ""
+        for _ in range(TimesPrint):
+            entire_text += Text + "\n"
 
-while counter < TimesPrint:
-    entire_text += Text + "\n"  # Adds the text to entire_text
-    counter += 1
+        output_label.config(text=entire_text)
+        pyperclip.copy(entire_text)
+    except ValueError:
+        output_label.config(text="Please enter a valid number for times.")
 
-print(entire_text)
+root = tk.Tk()
+root.title("Text Copier")
 
-# Copies the entire text to the clipboard
-pyperclip.copy(entire_text)
+tk.Label(root, text="How many times would you like to write the text:").pack()
+times_entry = tk.Entry(root)
+times_entry.pack()
+
+tk.Label(root, text="What would you like to write:").pack()
+text_entry = tk.Entry(root)
+text_entry.pack()
+
+tk.Button(root, text="Copy", command=copy_text).pack()
+
+output_label = tk.Label(root, text="", justify="left")
+output_label.pack()
+
+root.mainloop()
