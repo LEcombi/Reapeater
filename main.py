@@ -17,8 +17,37 @@ def copy_text():
     except ValueError:
         output_label.config(text="Please enter a valid number.")
 
+def apply_mode():
+    if root.tk.call("ttk::style", "theme", "use") == "default":
+        root.tk.call("ttk::style", "theme", "use", "clam")
+    else:
+        root.tk.call("ttk::style", "theme", "use", "default")
+
+    current_theme = root.tk.call("ttk::style", "theme", "use")
+    if current_theme == "clam":
+        apply_dark_mode()
+    else:
+        apply_light_mode()
+
+def apply_dark_mode():
+    root.configure(bg="black")
+    for widget in root.winfo_children():
+        widget.configure(bg="black", fg="white")
+
+def apply_light_mode():
+    root.configure(bg="white")
+    for widget in root.winfo_children():
+        widget.configure(bg="white", fg="black")
+
 root = tk.Tk()
-root.title("Text Repeater")
+root.title("Text Copier")
+
+# Apply the system's standard mode initially
+apply_mode()
+
+# Add a button to toggle between Dark Mode and Light Mode
+toggle_button = tk.Button(root, text="Toggle Dark/Light Mode", command=apply_mode)
+toggle_button.pack()
 
 tk.Label(root, text="How many times would you like to write the text:").pack()
 times_entry = tk.Entry(root)
@@ -28,7 +57,7 @@ tk.Label(root, text="What text would you like to write:").pack()
 text_entry = tk.Entry(root)
 text_entry.pack()
 
-tk.Button(root, text="Repeat", command=copy_text).pack()
+tk.Button(root, text="Copy", command=copy_text).pack()
 
 output_label = tk.Label(root, text="", justify="left")
 output_label.pack()
